@@ -2,6 +2,7 @@ import React from "react";
 import AnimatedTitle from "./AnimatedTitle";
 import { TiLocationArrow } from "react-icons/ti";
 import { useLanguage } from "../context/LanguageContext";
+import { projectService } from "../services/projectService";
 
 
 const ProjectCard = ({ project }) => {
@@ -36,44 +37,61 @@ const ProjectCard = ({ project }) => {
 const Projects = () => {
     const { t } = useLanguage();
 
-    const projects = [
+    const [projectsData, setProjectsData] = React.useState([
         {
             id: 1,
-            title: t('projects.list.p1.title'),
-            description: t('projects.list.p1.desc'),
+            title_key: 'projects.list.p1.title',
+            desc_key: 'projects.list.p1.desc',
             link: "https://github.com/RoyBuchanandev/RadarDev"
         },
         {
             id: 2,
-            title: t('projects.list.p2.title'),
-            description: t('projects.list.p2.desc'),
+            title_key: 'projects.list.p2.title',
+            desc_key: 'projects.list.p2.desc',
             link: "https://maxiforestieri.com"
         },
         {
             id: 3,
-            title: t('projects.list.p3.title'),
-            description: t('projects.list.p3.desc'),
+            title_key: 'projects.list.p3.title',
+            desc_key: 'projects.list.p3.desc',
             link: "https://heladeriareal.com"
         },
         {
             id: 4,
-            title: t('projects.list.p4.title'),
-            description: t('projects.list.p4.desc'),
+            title_key: 'projects.list.p4.title',
+            desc_key: 'projects.list.p4.desc',
             link: "https://cgarden.com.ar"
         },
         {
             id: 5,
-            title: t('projects.list.p5.title'),
-            description: t('projects.list.p5.desc'),
+            title_key: 'projects.list.p5.title',
+            desc_key: 'projects.list.p5.desc',
             link: "https://ossweb.tech"
         },
         {
             id: 6,
-            title: t('projects.list.p6.title'),
-            description: t('projects.list.p6.desc'),
+            title_key: 'projects.list.p6.title',
+            desc_key: 'projects.list.p6.desc',
             link: "https://estilonapoles.com"
         }
-    ];
+    ]);
+
+    React.useEffect(() => {
+        projectService.getAll()
+            .then(data => setProjectsData(data))
+            .catch(err => {
+                // Silently fall back to default data in production
+                if (import.meta.env.MODE === 'development') {
+                    console.warn("Backend offline, using fallback data:", err);
+                }
+            });
+    }, []);
+
+    const getProjectContent = (p) => ({
+        ...p,
+        title: t(p.title_key),
+        description: t(p.desc_key)
+    });
 
     return (
         <section id="proyectos" className="bg-black py-12 md:py-24 px-4 w-full">
@@ -94,8 +112,8 @@ const Projects = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
+                    {projectsData.map((project) => (
+                        <ProjectCard key={project.id} project={getProjectContent(project)} />
                     ))}
                 </div>
             </div>

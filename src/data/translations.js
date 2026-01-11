@@ -110,7 +110,7 @@ export const translations = {
         challenges: {
             tag: "CODE & EXPERIMENTS",
             title1: "LATEST",
-            title1: "LATEST",
+
             title2: "CHALLENGES",
             list: {
                 c1: { title: "Backend Challenge", desc: "Scalable RESTful API with clean architecture, robust validation, and full Swagger documentation." },
